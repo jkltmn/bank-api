@@ -3,7 +3,6 @@ package com.joshkaltman.emceestudios.bankapi.controller;
 import com.joshkaltman.emceestudios.bankapi.dto.*;
 import com.joshkaltman.emceestudios.bankapi.entity.AtmSession;
 import com.joshkaltman.emceestudios.bankapi.entity.BankAccount;
-import com.joshkaltman.emceestudios.bankapi.entity.Transaction;
 import com.joshkaltman.emceestudios.bankapi.exception.InvalidPinException;
 import com.joshkaltman.emceestudios.bankapi.exception.NotFoundException;
 import com.joshkaltman.emceestudios.bankapi.exception.SessionAlreadyTerminatedException;

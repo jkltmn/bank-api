@@ -9,9 +9,6 @@ import com.joshkaltman.emceestudios.bankapi.exception.SessionAlreadyTerminatedEx
 import com.joshkaltman.emceestudios.bankapi.repository.AtmSessionRepository;
 import com.joshkaltman.emceestudios.bankapi.repository.BankAccountRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;

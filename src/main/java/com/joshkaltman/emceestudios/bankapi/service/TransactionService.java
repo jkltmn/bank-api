@@ -6,7 +6,6 @@ import com.joshkaltman.emceestudios.bankapi.dto.PerformTransactionResponse;
 import com.joshkaltman.emceestudios.bankapi.entity.AtmSession;
 import com.joshkaltman.emceestudios.bankapi.entity.BankAccount;
 import com.joshkaltman.emceestudios.bankapi.entity.Transaction;
-import com.joshkaltman.emceestudios.bankapi.exception.InvalidPinException;
 import com.joshkaltman.emceestudios.bankapi.exception.NotFoundException;
 import com.joshkaltman.emceestudios.bankapi.repository.AtmSessionRepository;
 import com.joshkaltman.emceestudios.bankapi.repository.BankAccountRepository;
