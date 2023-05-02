@@ -1,9 +1,6 @@
 package com.joshkaltman.emceestudios.bankapi.controller;
 
-import com.joshkaltman.emceestudios.bankapi.dto.CreateBankAccountRequest;
-import com.joshkaltman.emceestudios.bankapi.dto.FriendlyTransaction;
-import com.joshkaltman.emceestudios.bankapi.dto.PerformTransactionRequest;
-import com.joshkaltman.emceestudios.bankapi.dto.PerformTransactionResponse;
+import com.joshkaltman.emceestudios.bankapi.dto.*;
 import com.joshkaltman.emceestudios.bankapi.entity.AtmSession;
 import com.joshkaltman.emceestudios.bankapi.entity.BankAccount;
 import com.joshkaltman.emceestudios.bankapi.entity.Transaction;
@@ -52,11 +49,13 @@ public class AtmController {
     }
 
     @PostMapping(path = "/accounts/{accountId}/sessions")
-    public AtmSession createSession(@PathVariable("accountId") long accountId) {
+    public AtmSession createSession(@PathVariable("accountId") long accountId, @Valid @RequestBody CreateSessionRequest req) {
         try {
-            return sessionService.createSessionForAccountId(accountId);
+            return sessionService.createSessionForAccountId(accountId, req);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (InvalidPinException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -86,8 +85,6 @@ public class AtmController {
             return transactionService.performTransaction(accountId, req);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (InvalidPinException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 

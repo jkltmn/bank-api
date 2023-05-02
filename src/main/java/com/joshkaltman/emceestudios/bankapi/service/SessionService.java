@@ -1,7 +1,9 @@
 package com.joshkaltman.emceestudios.bankapi.service;
 
+import com.joshkaltman.emceestudios.bankapi.dto.CreateSessionRequest;
 import com.joshkaltman.emceestudios.bankapi.entity.AtmSession;
 import com.joshkaltman.emceestudios.bankapi.entity.BankAccount;
+import com.joshkaltman.emceestudios.bankapi.exception.InvalidPinException;
 import com.joshkaltman.emceestudios.bankapi.exception.NotFoundException;
 import com.joshkaltman.emceestudios.bankapi.exception.SessionAlreadyTerminatedException;
 import com.joshkaltman.emceestudios.bankapi.repository.AtmSessionRepository;
@@ -27,9 +29,13 @@ public class SessionService {
         this.bankAccountRepository = bankAccountRepository;
     }
 
-    public AtmSession createSessionForAccountId(long accountId) throws NotFoundException {
+    public AtmSession createSessionForAccountId(long accountId, CreateSessionRequest req) throws NotFoundException, InvalidPinException {
         Optional<AtmSession> activeSession = atmSessionRepository.findActiveSessionByBankAccountId(accountId);
+
         if (activeSession.isPresent()) {
+            if (!activeSession.get().getBankAccount().getPin().equals(req.getPin())) {
+                throw new InvalidPinException("The PIN provided does not match the PIN for this account");
+            }
             AtmSession theSession = activeSession.get();
             theSession.setTerminatesAt(ZonedDateTime.now().plusMinutes(AtmSession.DEFAULT_ATM_SESSION_LENGTH_MINUTES));
             return atmSessionRepository.save(theSession);
@@ -38,6 +44,10 @@ public class SessionService {
         Optional<BankAccount> existingAccount = bankAccountRepository.findById(accountId);
         if (existingAccount.isEmpty()) {
             throw new NotFoundException("Account with id " + accountId + " does not exist");
+        }
+
+        if (!existingAccount.get().getPin().equals(req.getPin())) {
+            throw new InvalidPinException("The PIN provided does not match the PIN for this account");
         }
 
         AtmSession newSession = AtmSession.builder()

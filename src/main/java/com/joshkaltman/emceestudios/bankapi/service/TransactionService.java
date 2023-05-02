@@ -34,7 +34,7 @@ public class TransactionService {
         this.bankAccountRepository = bankAccountRepository;
     }
     public PerformTransactionResponse performTransaction(long accountId, PerformTransactionRequest req)
-            throws NotFoundException, InvalidPinException {
+            throws NotFoundException {
         Optional<AtmSession> session = atmSessionRepository.findActiveSessionByBankAccountId(accountId);
         if (session.isEmpty() || !session.get().isActive()) {
             throw new NotFoundException("No active session exists for bank account " + accountId);
@@ -47,37 +47,35 @@ public class TransactionService {
 
         BankAccount curAccount = curSession.getBankAccount();
 
-        boolean pinMatchesAccount = curSession.getBankAccount().getPin().equals(req.getPin());
         boolean isOverdraft = targetNewBalance < Constants.OVERDRAFT_PERMITTED_W_FEE_FLOOR;
         boolean isOverdraftPermitted = isOverdraft && targetNewBalance >= Constants.OVERDRAFT_REJECTION_FLOOR;
+        boolean applyRequestedTransaction = !isOverdraft || isOverdraftPermitted;
+
         long actualNewBalance = originalBalance +
-                ((!isOverdraft || isOverdraftPermitted) ? requestTransactionAmount : 0) +
+                ((applyRequestedTransaction) ? requestTransactionAmount : 0) +
                 ((isOverdraft) ? Constants.OVERDRAFT_FEE_AMT : 0);
 
-        if (!pinMatchesAccount) {
-            throw new InvalidPinException("The PIN provided does not match the PIN for this account");
-        }
-        else {
-            String remarks = (isOverdraft) ?
-                    (isOverdraftPermitted) ?
-                        "This transaction has resulted in an overdraft. An overdraft fee has been assessed."
-                        : "This transaction has resulted in a major overdraft and was not completed. An overdraft fee has been assessed."
-                    : null;
-
-            Transaction requested = buildTransaction(curAccount, requestTransactionAmount, remarks, !isOverdraft || isOverdraftPermitted);
-            transactionRepository.save(requested);
-
-            if (isOverdraft) {
-                Transaction overdraft = buildOverdraftTransaction(curAccount, requested.getId());
-                transactionRepository.save(overdraft);
-                targetNewBalance += overdraft.getAmount();
+        String remarks = null;
+        if (isOverdraft) {
+            if (isOverdraftPermitted) {
+                remarks = "This transaction has resulted in an overdraft. An overdraft fee has been assessed.";
+            } else {
+                remarks = "This transaction has resulted in a major overdraft and was not completed. An overdraft fee has been assessed.";
             }
-
-            curAccount.setBalance(targetNewBalance);
-            bankAccountRepository.save(curAccount);
-
-            return new PerformTransactionResponse(requested, originalBalance, actualNewBalance);
         }
+
+        Transaction requested = buildTransaction(curAccount, requestTransactionAmount, remarks, applyRequestedTransaction);
+        transactionRepository.save(requested);
+
+        if (isOverdraft) {
+            Transaction overdraft = buildOverdraftTransaction(curAccount, requested.getId());
+            transactionRepository.save(overdraft);
+        }
+
+        curAccount.setBalance(actualNewBalance);
+        bankAccountRepository.save(curAccount);
+
+        return new PerformTransactionResponse(requested, originalBalance, actualNewBalance);
     }
 
     public List<FriendlyTransaction> getAllTransactionsForBankAccount(long accountId) throws NotFoundException {
