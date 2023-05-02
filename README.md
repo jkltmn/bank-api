@@ -11,9 +11,10 @@ To set the environment variable:
 
 Once Java is installed and the env var is set, open a terminal window at the root directory of this project.
 Run the command `./gradlew bootRun` to start the application. The gradle wrapper should start, build the project, and run it.
-The database within the project is embedded and will save data off to your user directory in a folder called atmapidb.
+The database within the project is embedded and will save data off to your user directory in files `atmapidb.mv.db`
+and `atmapidb.trace.db`.
 Schema generation occurs automatically by Spring Data JPA and no startup scripts are required.
-If you want to start from scratch or remove the db data from your computer, you can delete this directory. 
+If you want to start from scratch or remove the db data from your computer, you can delete these files. 
 Kill the server with ctrl+c after it is started.
 
 
