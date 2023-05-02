@@ -20,6 +20,6 @@ public class CreateBankAccountRequest {
     @Pattern(regexp = "[a-zA-Z]+")
     private String lastName;
 
-    @Pattern(regexp = "[A-Z]{3}")
+    @Pattern(regexp = "USD" /*"[A-Z]{3}"*/)
     private String currency = "USD";
 }

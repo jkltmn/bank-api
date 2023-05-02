@@ -1,5 +1,6 @@
-package com.joshkaltman.emceestudios.bankapi.dto;
+package com.joshkaltman.emceestudios.bankapi.unit.dto;
 
+import com.joshkaltman.emceestudios.bankapi.dto.PerformTransactionRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -19,7 +20,6 @@ public class PerformTransactionRequestValidationTests {
 
     private PerformTransactionRequest buildValidPerformTransactionRequest() {
         PerformTransactionRequest request = new PerformTransactionRequest();
-        request.setPin("2495");
         request.setAmount("100.00");
 
         return request;
@@ -98,52 +98,6 @@ public class PerformTransactionRequestValidationTests {
 
         req.setAmount("10.000");
         violations = validator.validate(req);
-        assertFalse(violations.isEmpty());
-    }
-
-
-    @Test
-    public void validatesEmptyPin() {
-        var req = buildValidPerformTransactionRequest();
-        req.setPin("");
-
-        Set<ConstraintViolation<PerformTransactionRequest>> violations = validator.validate(req);
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    public void validatesNullPin() {
-        var req = buildValidPerformTransactionRequest();
-        req.setPin(null);
-
-        Set<ConstraintViolation<PerformTransactionRequest>> violations = validator.validate(req);
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    public void validatesPinWithInvalidChars() {
-        var req = buildValidPerformTransactionRequest();
-        req.setPin("24A2");
-
-        Set<ConstraintViolation<PerformTransactionRequest>> violations = validator.validate(req);
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    public void validatesPinWithTooFewChars() {
-        var req = buildValidPerformTransactionRequest();
-        req.setPin("133");
-
-        Set<ConstraintViolation<PerformTransactionRequest>> violations = validator.validate(req);
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    public void validatesPinWithTooManyChars() {
-        var req = buildValidPerformTransactionRequest();
-        req.setPin("13344");
-
-        Set<ConstraintViolation<PerformTransactionRequest>> violations = validator.validate(req);
         assertFalse(violations.isEmpty());
     }
 }

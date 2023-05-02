@@ -1,4 +1,4 @@
-package com.joshkaltman.emceestudios.bankapi.dto;
+package com.joshkaltman.emceestudios.bankapi.unit.dto;
 
 
 import com.joshkaltman.emceestudios.bankapi.dto.CreateBankAccountRequest;

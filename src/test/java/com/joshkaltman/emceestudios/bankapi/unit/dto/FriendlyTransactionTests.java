@@ -1,5 +1,6 @@
-package com.joshkaltman.emceestudios.bankapi.dto;
+package com.joshkaltman.emceestudios.bankapi.unit.dto;
 
+import com.joshkaltman.emceestudios.bankapi.dto.FriendlyTransaction;
 import com.joshkaltman.emceestudios.bankapi.entity.BankAccount;
 import com.joshkaltman.emceestudios.bankapi.entity.Transaction;
 import org.junit.jupiter.api.Test;

@@ -58,7 +58,7 @@ public class AtmController {
         }
     }
 
-    @GetMapping(path = "/accounts/{accountId}/sessions/{sessionId}/terminate")
+    @PostMapping(path = "/accounts/{accountId}/sessions/{sessionId}/terminate")
     public AtmSession terminateAtmSesssion(@PathVariable long accountId, @PathVariable long sessionId) {
         try {
             return sessionService.terminateAtmSesssion(accountId, sessionId);

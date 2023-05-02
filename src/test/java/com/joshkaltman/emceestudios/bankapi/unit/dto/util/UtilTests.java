@@ -1,5 +1,7 @@
-package com.joshkaltman.emceestudios.bankapi.util;
+package com.joshkaltman.emceestudios.bankapi.unit.dto.util;
 
+import com.joshkaltman.emceestudios.bankapi.util.Util;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UtilTests {
     @Test
     public void mapAmountToLong() {
-        assertEquals(25034L, Util.mapAmountToLong("250.34"));
+        Assertions.assertEquals(25034L, Util.mapAmountToLong("250.34"));
         assertEquals(-1040132, Util.mapAmountToLong("-10401.32"));
     }
 

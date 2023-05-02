@@ -37,6 +37,4 @@ public class BankAccount {
 
     @Column(nullable = false)
     private long balance;
-
-    private ZonedDateTime lastReconciled;
 }
