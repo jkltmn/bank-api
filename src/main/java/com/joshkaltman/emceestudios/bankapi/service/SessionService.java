@@ -29,6 +29,7 @@ public class SessionService {
     public AtmSession createSessionForAccountId(long accountId, CreateSessionRequest req) throws NotFoundException, InvalidPinException {
         Optional<AtmSession> activeSession = atmSessionRepository.findActiveSessionByBankAccountId(accountId);
 
+        // Extend and return an already active session, if one exists
         if (activeSession.isPresent()) {
             if (!activeSession.get().getBankAccount().getPin().equals(req.getPin())) {
                 throw new InvalidPinException("The PIN provided does not match the PIN for this account");
@@ -38,6 +39,7 @@ public class SessionService {
             return atmSessionRepository.save(theSession);
         }
 
+        // Additional validation
         Optional<BankAccount> existingAccount = bankAccountRepository.findById(accountId);
         if (existingAccount.isEmpty()) {
             throw new NotFoundException("Account with id " + accountId + " does not exist");
