@@ -64,9 +64,10 @@ Sessions will not be deleted when closed, for the sake of auditing and bookkeepi
 
 A valid account and active session for that account must exist before performing a transaction. Positive dollar amounts
 should generally go through without issue as long as there is an active session. Negative dollar amounts will be
-processed as long as an overdraft will not bring the account to below -$100. Overdrafts will result in a fee, processed
-as a separate -$15 transaction. All transactions, whether successfully applied or not, will be kept in the transaction
-log for auditing and bookkeeping purposes.
+processed as long as an overdraft will not bring the account to below -$100. Overdrafts that result in a balance >-$100 
+will be processed but result in a fee processed as a separate -$15 transaction. Overdrafts that bring an account balance
+below -$100 will be not be processed and a fee will not be assessed. All transactions, whether successfully applied or 
+not, will be kept in the transaction log for auditing and bookkeeping purposes.
 
 
 ## Major Components
