@@ -23,6 +23,8 @@ A Postman collection with some pre-configured requests can be found in the `post
 Import both the request collection and the local environment vars into your Postman app.
 https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data
 
+If you'd like to view the state of the database, navigate to http://localhost:8080/h2-console/. Enter the connection
+properties that are located at the top of the `src/main/resources/application.properties` file to connect to it.
 
 ## About
 
