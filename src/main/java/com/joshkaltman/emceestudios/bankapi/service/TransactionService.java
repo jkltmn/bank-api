@@ -52,21 +52,21 @@ public class TransactionService {
 
         long actualNewBalance = originalBalance +
                 ((applyRequestedTransaction) ? requestTransactionAmount : 0) +
-                ((isOverdraft) ? Constants.OVERDRAFT_FEE_AMT : 0);
+                ((isOverdraftPermitted) ? Constants.OVERDRAFT_FEE_AMT : 0);
 
         String remarks = null;
         if (isOverdraft) {
             if (isOverdraftPermitted) {
                 remarks = "This transaction has resulted in an overdraft. An overdraft fee has been assessed.";
             } else {
-                remarks = "This transaction has resulted in a major overdraft and was not completed. An overdraft fee has been assessed.";
+                remarks = "This transaction has resulted in a major overdraft and was not completed.";
             }
         }
 
         Transaction requested = buildTransaction(curAccount, requestTransactionAmount, remarks, applyRequestedTransaction);
         transactionRepository.save(requested);
 
-        if (isOverdraft) {
+        if (isOverdraftPermitted) {
             Transaction overdraft = buildOverdraftTransaction(curAccount, requested.getId());
             transactionRepository.save(overdraft);
         }
